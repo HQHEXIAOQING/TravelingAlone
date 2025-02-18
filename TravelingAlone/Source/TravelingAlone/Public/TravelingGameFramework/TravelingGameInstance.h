@@ -32,9 +32,11 @@ public:
 	//保存游戏至插槽
 	UFUNCTION(BlueprintCallable,DisplayName="保存游戏至插槽",Category="TravelingGameInstance")
 	bool SaveTravelingGameToSlot(FString SlotId);
-	
 	//自动存档游戏
-	UFUNCTION(BlueprintCallable,DisplayName="自动存档游戏",Category="TravelingGameInstance")
+	UFUNCTION(BlueprintCallable,DisplayName="自动存档游戏（异步）",Category="TravelingGameInstance")
 	void AsyncAutoSaveGameToSlot();
+	
+private:
+    //异步存档回调事件
 	void OnGameSaved(const FString& SlotName, const int32 UserIndex, bool bSuccess);
 };
