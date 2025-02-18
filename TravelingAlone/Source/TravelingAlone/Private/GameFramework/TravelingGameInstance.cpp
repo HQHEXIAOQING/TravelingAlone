@@ -64,12 +64,14 @@ void UTravelingGameInstance::AsyncAutoSaveGameToSlot()
 	FAsyncSaveGameToSlotDelegate SaveDelegate;
 	SaveDelegate.BindUObject(this, &UTravelingGameInstance::OnGameSaved);//绑定回调函数
 	TravelingSaveGameCurrent->GetGameInfo();//获取存档信息
+	if (OnAutoSaveGameStart.IsBound()){OnAutoSaveGameStart.Broadcast();}//调用委托，表示自动存档开始
 	//进行异步存档
 	UGameplayStatics::AsyncSaveGameToSlot(TravelingSaveGameCurrent,UTravelingSaveGame_Setting::GetTravelingAloneAutoSaveGameString(),0,SaveDelegate);
 }
 
 void UTravelingGameInstance::OnGameSaved(const FString& SlotName, const int32 UserIndex, bool bSuccess)
 {
+	if (OnAutoSaveGameResult.IsBound()){OnAutoSaveGameResult.Broadcast(bSuccess);}//调用委托，表示自动存档结束
 	if (bSuccess)
 	{
 		UE_LOG(LogTemp, Log, TEXT("UTravelingGameInstance::OnGameSaved 插槽%s异步保存成功！"), *SlotName);

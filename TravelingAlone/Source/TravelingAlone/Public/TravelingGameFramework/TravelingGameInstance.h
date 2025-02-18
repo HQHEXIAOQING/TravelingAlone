@@ -35,6 +35,20 @@ public:
 	//自动存档游戏
 	UFUNCTION(BlueprintCallable,DisplayName="自动存档游戏（异步）",Category="TravelingGameInstance")
 	void AsyncAutoSaveGameToSlot();
+
+	//委托**********************************************
+
+	//*******以下为自动存档的相关委托**********
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAutoSaveGameStart);//开始进行自动保存
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAutoSaveGameResult,bool,Result);//自动保存结束
+	//保存开始
+	UPROPERTY(BlueprintAssignable,DisplayName="自动保存开始",Category="TravelingGameInstance")
+	FAutoSaveGameStart OnAutoSaveGameStart;
+	//保存结束
+	UPROPERTY(BlueprintAssignable,DisplayName="自动保存结束",Category="TravelingGameInstance")
+	FAutoSaveGameResult OnAutoSaveGameResult;
+	//*******以上为自动存档的相关委托**********
+
 	
 private:
     //异步存档回调事件
