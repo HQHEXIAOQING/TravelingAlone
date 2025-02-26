@@ -20,7 +20,7 @@ public:
 	TSubclassOf<UTravelingSaveGame_Slot> TravelingSaveGame_SlotClass = nullptr;
 
 	//获取独旅游戏配置信息
-	UFUNCTION(BlueprintCallable, meta=(Static, NoDestructor),DisplayName="获取独旅游戏配置信息",Category="DFDeveloperSettings")
+	UFUNCTION(BlueprintCallable,BlueprintPure, meta=(Static, NoDestructor),DisplayName="获取独旅游戏配置信息",Category="TravelingAloneDeveloperSettings")
 	static const UTravelingAloneDeveloperSettings* GetDFDeveloperSettings() { return GetDefault<UTravelingAloneDeveloperSettings>(); }
 	
 };

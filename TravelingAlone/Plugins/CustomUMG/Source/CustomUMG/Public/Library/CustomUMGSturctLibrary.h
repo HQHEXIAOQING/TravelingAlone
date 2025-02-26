@@ -21,3 +21,15 @@ struct FCustomButton
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,DisplayName="按钮笔刷样式",Category="CustomButton")
 	FSlateBrush ButtonTexture;
 };
+
+//自定义文本设置
+USTRUCT(BlueprintType,Blueprintable,DisplayName="自定义文本设置",Category="CustomButton")
+struct FCustomText
+{
+	GENERATED_BODY()
+	
+	//文本设置
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,DisplayName="文本设置",Category="CustomButton")
+	FText CustomText = FText::FromString(TEXT("自定义文本"));
+	
+};

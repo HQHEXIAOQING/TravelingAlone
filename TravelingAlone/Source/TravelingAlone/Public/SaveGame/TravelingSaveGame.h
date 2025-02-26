@@ -8,12 +8,18 @@ class TRAVELINGALONE_API UTravelingSaveGame_Slot:public USaveGame
 {
 	GENERATED_BODY()
 public:
-
+	
+	//存储变量*********************************************
+	
+	//存档基本信息
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="存档基本信息",Category="SaveGameSetting")
+	FTravelingSaveGameBase TravelingSaveGameBase;
 	
 	//函数*******************************************
 
 	//获取游戏信息
-	virtual void GetGameInfo(){}
+	virtual void GetGameInfo(){}//TODO::这里需要实现读取数据的过程，目前还没有数据需要读取，所以先空着
+	
 };
 
 UCLASS(Blueprintable,BlueprintType,DisplayName="游戏全局设置")

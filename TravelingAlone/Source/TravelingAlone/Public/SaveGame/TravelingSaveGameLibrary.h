@@ -16,6 +16,6 @@ struct FTravelingSaveGameBase
 	FText SaveSlotName = FText::FromString(TEXT("未命名"));
 	//存档时间
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="存档时间",Category="SaveGameSetting")
-	FTimespan SaveTime;
+	FDateTime SaveTime;
 	
 };
