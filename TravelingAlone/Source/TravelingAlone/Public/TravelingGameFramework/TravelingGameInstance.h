@@ -41,6 +41,9 @@ public:
 	//加载游戏存档
 	UFUNCTION(BlueprintCallable,DisplayName="加载游戏存档",Category="TravelingGameInstance")
 	bool LoadTravelingSaveGameFromSlot(FString SlotId);
+	//删除游戏存档
+	UFUNCTION(BlueprintCallable,DisplayName="删除游戏存档",Category="TravelingGameInstance")
+	bool DeleteTravelingSaveGameFromSlot(FString SlotId);
 	//保存游戏至插槽
 	UFUNCTION(BlueprintCallable,DisplayName="保存游戏至插槽",Category="TravelingGameInstance")
 	bool SaveTravelingGameToSlot(FTravelingSaveGameBase NewTravelingSaveGameBase);
@@ -59,18 +62,27 @@ public:
 	void AutoSaveGameResult(bool Result){if (OnAutoSaveGameResult.IsBound()){OnAutoSaveGameResult.Broadcast(Result);}AutoSaveGameResultEvent(Result);}
 	UFUNCTION(BlueprintImplementableEvent,DisplayName="自动保存结束",Category="TravelingGameInstance")
 	void AutoSaveGameResultEvent(bool Result);
+
+	//更新游戏设置数据
+	void UpdateGameSettingShow(){if (OnGameSettingChanged.IsBound()){OnGameSettingChanged.Broadcast(TravelingSaveGameSetting);}UpdateGameSettingShowEvent(TravelingSaveGameSetting);}
+	UFUNCTION(BlueprintImplementableEvent,DisplayName="更新游戏设置数据事件",Category="TravelingGameInstance")
+	void UpdateGameSettingShowEvent(UTravelingSaveGame_Setting* NewTravelingSaveGame_Setting);
 	
 	//委托**********************************************
 
 	//*******以下为自动存档的相关委托**********
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAutoSaveGameStart);//开始进行自动保存
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAutoSaveGameResult,bool,Result);//自动保存结束
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FGameSettingChanged,UTravelingSaveGame_Setting*,NewTravelingSaveGame_Setting);//游戏设置数据发生变化
 	//保存开始
 	UPROPERTY(BlueprintAssignable,DisplayName="自动保存开始",Category="TravelingGameInstance")
 	FAutoSaveGameStart OnAutoSaveGameStart;
 	//保存结束
 	UPROPERTY(BlueprintAssignable,DisplayName="自动保存结束",Category="TravelingGameInstance")
 	FAutoSaveGameResult OnAutoSaveGameResult;
+	//游戏设置数据发生变化
+	UPROPERTY(BlueprintAssignable,DisplayName="游戏设置数据发生变化",Category="TravelingGameInstance")
+	FGameSettingChanged OnGameSettingChanged;
 	//*******以上为自动存档的相关委托**********
 
 	

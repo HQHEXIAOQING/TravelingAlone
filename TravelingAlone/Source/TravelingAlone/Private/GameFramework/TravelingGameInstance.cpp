@@ -52,7 +52,10 @@ bool UTravelingGameInstance::SaveTravelingGameSetting()
 {
 	//判断游戏设置是否有效
 	if (TravelingSaveGameSetting)
-	{return UGameplayStatics::SaveGameToSlot(TravelingSaveGameSetting,UTravelingSaveGame_Setting::GetTravelingAloneGameSettingString(),0);}
+	{
+		UpdateGameSettingShow();//游戏设置变化时更新游戏设置显示
+		return UGameplayStatics::SaveGameToSlot(TravelingSaveGameSetting,UTravelingSaveGame_Setting::GetTravelingAloneGameSettingString(),0);
+	}
 	return false;
 }
 
@@ -64,6 +67,21 @@ bool UTravelingGameInstance::LoadTravelingSaveGameFromSlot(FString SlotId)
 		return true;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("UTravelingGameInstance::LoadSaveGameFromSlot 游戏插槽%s不存在！"), *SlotId);
+	return false;
+}
+
+bool UTravelingGameInstance::DeleteTravelingSaveGameFromSlot(FString SlotId)
+{
+	if (TravelingSaveGameSetting->Map_SaveGameIdToInfo.Contains(SlotId))
+	{
+		if (UGameplayStatics::DeleteGameInSlot(SlotId,0))
+		{
+			TravelingSaveGameSetting->Map_SaveGameIdToInfo.Remove(SlotId);
+			SaveTravelingGameSetting();//对游戏设置进行保存
+			return true;
+		}//判断是否删除成功
+		else{UE_LOG(LogTemp, Warning, TEXT("UTravelingGameInstance::DeleteTravelingSaveGameFromSlot 此存档删除失败了！"));}//做错误打印
+	}
 	return false;
 }
 
