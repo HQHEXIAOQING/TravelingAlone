@@ -19,3 +19,40 @@ struct FTravelingSaveGameBase
 	FDateTime SaveTime;
 	
 };
+
+//游戏基本设置
+USTRUCT(BlueprintType,Blueprintable,DisplayName="游戏设置数据")
+struct FTASaveGameSettingData_BaseSetting
+{
+	GENERATED_BODY()
+};
+
+//游戏渲染设置
+USTRUCT(BlueprintType,Blueprintable,DisplayName="游戏渲染设置")
+struct FTASaveGameSettingData_RenderSetting
+{
+	GENERATED_BODY()
+};
+
+//游戏声音设置
+USTRUCT(BlueprintType,Blueprintable,DisplayName="游戏声音设置")
+struct FTASaveGameSettingData_SoundSetting
+{
+	GENERATED_BODY()
+};
+
+//游戏设置数据
+USTRUCT(BlueprintType,Blueprintable,DisplayName="游戏设置数据")
+struct FTASaveGameSettingData
+{
+	GENERATED_BODY()
+	//基本设置
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="基本设置",Category="TASaveGameSettingData")
+	FTASaveGameSettingData_BaseSetting BaseSetting;
+	//渲染设置
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="渲染设置",Category="TASaveGameSettingData")
+	FTASaveGameSettingData_RenderSetting RenderSetting;
+	//声音设置
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="声音设置",Category="TASaveGameSettingData")
+	FTASaveGameSettingData_SoundSetting SoundSetting;
+};

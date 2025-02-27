@@ -24,6 +24,7 @@ public:
 	//当前游戏插槽Id
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,DisplayName="当前游戏插槽Id",Category="TravelingGameInstance")
 	FString CurrentSaveGameId = FString("");
+	
 	//函数*********************************************
 
 	//进入游戏前初始化事件（在进入游戏前需要处理和设置的内容）
