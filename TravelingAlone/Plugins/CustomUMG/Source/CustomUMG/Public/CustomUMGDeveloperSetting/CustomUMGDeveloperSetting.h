@@ -9,10 +9,10 @@ public:
 	//变量*****************************************
 
 	//文本设置
+	
 	//自定义字体样式设置
-	UPROPERTY(EditAnywhere,Config, BlueprintReadOnly,DisplayName = "自定义字体样式设置", Category="TextSetting")
-	FSlateFontInfo CustomFontInfo;
-
+	UPROPERTY(EditAnywhere, Config,BlueprintReadOnly, Category=SlateStyleRules, meta=(AllowedClasses="/Script/Engine.Font", DisplayName="自定义字体样式设置"))
+	TSoftObjectPtr<const UObject> FontObject;
 	//获取独旅游戏配置信息
 	UFUNCTION(BlueprintCallable,BlueprintPure, meta=(Static, NoDestructor),DisplayName="获取自定义界面设置",Category="CustomUMGDeveloperSetting")
 	static const UCustomUMGDeveloperSetting* GetCustomUMGDFDeveloperSettings() { return GetDefault<UCustomUMGDeveloperSetting>(); }

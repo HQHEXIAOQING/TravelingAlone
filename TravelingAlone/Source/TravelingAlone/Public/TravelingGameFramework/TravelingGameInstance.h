@@ -18,10 +18,18 @@ public:
 	//当前游戏存档数据
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,DisplayName="当前游戏存档数据",Category="TravelingGameInstance")
 	UTravelingSaveGame_Slot* TravelingSaveGameCurrent = nullptr;
-	
+	//是否新游戏
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,DisplayName="是否新游戏",Category="TravelingGameInstance")
+	bool bIsNewGame = false;
+	//当前游戏插槽Id
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,DisplayName="当前游戏插槽Id",Category="TravelingGameInstance")
+	FString CurrentSaveGameId = FString("");
 	//函数*********************************************
 
-	//进入游戏初始化事件（在进入游戏后调用的事件）
+	//进入游戏前初始化事件（在进入游戏前需要处理和设置的内容）
+	UFUNCTION(BlueprintCallable,DisplayName="进入游戏初始化事件",Category="TravelingGameInstance")
+	void PreGoToGameMain(bool bNewIsNewGame,FString NewCurrentSaveGameId);
+	//进入游戏初始化事件（在进入游戏后调用的事件，只有在主世界中调用搞得事件，请不要在主世界之外调用）
 	UFUNCTION(BlueprintCallable,DisplayName="进入游戏初始化事件",Category="TravelingGameInstance")
 	void GoToGameMain();
 	//加载游戏设置
@@ -36,6 +44,9 @@ public:
 	//保存游戏至插槽
 	UFUNCTION(BlueprintCallable,DisplayName="保存游戏至插槽",Category="TravelingGameInstance")
 	bool SaveTravelingGameToSlot(FTravelingSaveGameBase NewTravelingSaveGameBase);
+	//获取新的存档Id
+	UFUNCTION(BlueprintCallable,BlueprintPure,DisplayName="获取新的存档Id",Category="TravelingGameInstance")
+	FString GetNewSaveGameSlotName();
 	
 	//自动存档游戏
 	UFUNCTION(BlueprintCallable,DisplayName="自动存档游戏（异步）",Category="TravelingGameInstance")

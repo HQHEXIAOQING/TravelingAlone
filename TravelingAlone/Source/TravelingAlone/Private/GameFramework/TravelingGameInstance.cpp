@@ -4,16 +4,25 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "SaveGame/TravelingSaveGame.h"
 
+void UTravelingGameInstance::PreGoToGameMain(bool bNewIsNewGame,FString NewCurrentSaveGameId)
+{
+	bIsNewGame = bNewIsNewGame;//设置当前游戏内容
+	CurrentSaveGameId = NewCurrentSaveGameId;//设置新的游戏存档Id
+}
+
 void UTravelingGameInstance::GoToGameMain()
 {
-	//如果存档存在，说明是从存档进入的游戏，如果不存在，那就是默认进入游戏，这个时候需要创建一个游戏存档对象，此时对象数据为空，需要跑一次自动存储事件
-	if (TravelingSaveGameCurrent){return;}
-	else
+	TravelingSaveGameCurrent = Cast<UTravelingSaveGame_Slot>(UGameplayStatics::LoadGameFromSlot(CurrentSaveGameId,0));
+	if (!TravelingSaveGameCurrent)
 	{
-		TravelingSaveGameCurrent = NewObject<UTravelingSaveGame_Slot>(this,UTravelingAloneDeveloperSettings::GetDFDeveloperSettings()->TravelingSaveGame_SlotClass);
-		AsyncAutoSaveGameToSlot();//异步保存游戏
+		TravelingSaveGameCurrent = NewObject<UTravelingSaveGame_Slot>(this,UTravelingAloneDeveloperSettings::GetDFDeveloperSettings()->TravelingSaveGame_SlotClass);//创建游戏存档
+		FTravelingSaveGameBase NewTravelingSaveGameBase;//设置基本数据
+		NewTravelingSaveGameBase.SaveSlotId = CurrentSaveGameId;
+		NewTravelingSaveGameBase.SaveSlotName = FText::FromString(TEXT("NewGame"));
+		NewTravelingSaveGameBase.SaveTime = UKismetMathLibrary::Now();
+		TravelingSaveGameCurrent->TravelingSaveGameBase = NewTravelingSaveGameBase;//设置存档基本数据
 	}
-	
+	AsyncAutoSaveGameToSlot();//无论是否存档加载的游戏，在进入游戏主世界时都需要进行第一次异步保存。
 }
 
 bool UTravelingGameInstance::LoadTravelingGameSetting(bool bIsResetGameSetting,UTravelingSaveGame_Setting*& NewTravelingSaveGame_Setting)
@@ -70,6 +79,16 @@ bool UTravelingGameInstance::SaveTravelingGameToSlot(FTravelingSaveGameBase NewT
 	return false;
 }
 
+FString UTravelingGameInstance::GetNewSaveGameSlotName()
+{
+	if (TravelingSaveGameSetting)
+	{
+		int32 NewIndex = TravelingSaveGameSetting->SaveGameSlotIndex++;
+		return FString::Printf(TEXT("NewGameSlot_%d"),NewIndex);
+	}else{UE_LOG(LogTemp, Warning, TEXT("UTravelingGameInstance::GetNewSaveGameSlotName 游戏设置存档不存在了！"));}
+	return FString();
+}
+
 void UTravelingGameInstance::AsyncAutoSaveGameToSlot()
 {
 	if (!TravelingSaveGameCurrent)
@@ -78,18 +97,12 @@ void UTravelingGameInstance::AsyncAutoSaveGameToSlot()
 	FAsyncSaveGameToSlotDelegate SaveDelegate;
 	SaveDelegate.BindUObject(this, &UTravelingGameInstance::OnGameSaved);//绑定回调函数
 	
-	FString SlotNameId = UTravelingSaveGame_Setting::GetTravelingAloneAutoSaveGameString();
 	//TODO::这里是存档中基本数据的设置
-	//设置自动存档基本数据
-	FTravelingSaveGameBase TravelingSaveGameBase;
-	TravelingSaveGameBase.SaveSlotId = SlotNameId;
-	TravelingSaveGameBase.SaveTime = UKismetMathLibrary::Now();
-	TravelingSaveGameBase.SaveSlotName = FText::FromString(TEXT("自动存档"));
-	TravelingSaveGameSetting->Map_SaveGameIdToInfo.Add(SlotNameId,TravelingSaveGameBase);
 	TravelingSaveGameCurrent->GetGameInfo();//获取存档信息
-	TravelingSaveGameCurrent->TravelingSaveGameBase = TravelingSaveGameBase;//设置此存档基本数据
+	TravelingSaveGameCurrent->TravelingSaveGameBase.SaveTime = UKismetMathLibrary::Now();//设置当前保存最新时间
+	TravelingSaveGameSetting->Map_SaveGameIdToInfo.Add(CurrentSaveGameId,TravelingSaveGameCurrent->TravelingSaveGameBase);//在游戏设置中重新刷新这一条存档数据
 	AutoSaveGameStart();//调用委托，表示自动存档开始
-	UGameplayStatics::AsyncSaveGameToSlot(TravelingSaveGameCurrent,SlotNameId,0,SaveDelegate);//进行异步存档保存
+	UGameplayStatics::AsyncSaveGameToSlot(TravelingSaveGameCurrent,CurrentSaveGameId,0,SaveDelegate);//进行异步存档保存
 	SaveTravelingGameSetting();//保存游戏设置
 }
 
