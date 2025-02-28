@@ -33,10 +33,12 @@ public:
 	//所有保存的存档和相关基础信息
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="存档以及相关基本信息",Category="SaveGameSetting")
 	TMap<FString,FTravelingSaveGameBase> Map_SaveGameIdToInfo;
+	//游戏设置数据
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="游戏设置数据",Category="SaveGameSetting")
+	FTASaveGameSettingData TASaveGameSettingData;
 	//当前存档Id
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="当前存档Id",Category="SaveGameSetting")
 	int32 SaveGameSlotIndex = 0;
-	
 	//静态函数****************************************
 	
 	//返回游戏设置存档名称

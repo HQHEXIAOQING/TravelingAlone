@@ -32,6 +32,42 @@ USTRUCT(BlueprintType,Blueprintable,DisplayName="游戏渲染设置")
 struct FTASaveGameSettingData_RenderSetting
 {
 	GENERATED_BODY()
+	
+	//着色设置
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="着色设置",Category="TASaveGameSettingData")
+	int32 ShadingQuality = 1;
+	//阴影质量
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="阴影质量",Category="TASaveGameSettingData")
+	int32 ShadowQuality = 1;
+	//全局光照质量
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="全局光照质量",Category="TASaveGameSettingData")
+	int32 GlobalIlluminationQuality = 1;
+	//抗锯齿质量
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="抗锯齿质量",Category="TASaveGameSettingData")
+	int32 AntiAliasingQuality = 1;
+	//反射质量
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="反射质量",Category="TASaveGameSettingData")
+	int32 ReflectionQuality = 1;
+	//纹理质量
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="纹理质量",Category="TASaveGameSettingData")
+	int32 TextureQuality = 1;
+	//后期处理质量
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="后期处理质量",Category="TASaveGameSettingData")
+	int32 PostProcessingQuality = 1;
+
+	//全屏模式
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="全屏模式",Category="TASaveGameSettingData")
+	TEnumAsByte<EWindowMode::Type> FullscreenMode = EWindowMode::Type::Fullscreen;
+	//屏幕分辨率
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="屏幕分辨率",Category="TASaveGameSettingData")
+	FIntPoint ScreenResolution = FIntPoint(1920,1080);
+	//垂直同步
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="垂直同步",Category="TASaveGameSettingData")
+	bool bIsVSyncEnabled = true;
+	//帧率限制（0为不限制）
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,DisplayName="帧率限制",Category="TASaveGameSettingData")
+	float FrameRateLimit = 0;
+	
 };
 
 //游戏声音设置

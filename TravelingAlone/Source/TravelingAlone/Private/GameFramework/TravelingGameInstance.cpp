@@ -1,5 +1,6 @@
 #include "TravelingGameFramework/TravelingGameInstance.h"
 #include "DeveloperSettings/TravelingAloneDeveloperSetting.h"
+#include "GameFramework/GameUserSettings.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "SaveGame/TravelingSaveGame.h"
@@ -25,6 +26,62 @@ void UTravelingGameInstance::GoToGameMain()
 	AsyncAutoSaveGameToSlot();//无论是否存档加载的游戏，在进入游戏主世界时都需要进行第一次异步保存。
 }
 
+void UTravelingGameInstance::ApplyGameRenderSetting(FTASaveGameSettingData_RenderSetting NewRenderSetting)
+{
+	TravelingSaveGameSetting->TASaveGameSettingData.RenderSetting = NewRenderSetting;//更新游戏设置数据
+	UGameUserSettings* GameUserSetting = UGameUserSettings::GetGameUserSettings();//获取游戏用户设置
+	GameUserSetting->SetShadingQuality(NewRenderSetting.ShadingQuality);//设置着色质量
+	GameUserSetting->SetShadowQuality(NewRenderSetting.ShadowQuality);//设置阴影质量
+	GameUserSetting->SetGlobalIlluminationQuality(NewRenderSetting.GlobalIlluminationQuality);//设置全局光照信息
+	GameUserSetting->SetAntiAliasingQuality(NewRenderSetting.AntiAliasingQuality);//设置抗锯齿
+	GameUserSetting->SetReflectionQuality(NewRenderSetting.ReflectionQuality);//设置反射质量
+	GameUserSetting->SetTextureQuality(NewRenderSetting.TextureQuality);//设置纹理质量
+	GameUserSetting->SetPostProcessingQuality(NewRenderSetting.PostProcessingQuality);//设置后期处理质量
+
+	GameUserSetting->SetFullscreenMode(NewRenderSetting.FullscreenMode);//设置全屏模式
+	GameUserSetting->SetScreenResolution(NewRenderSetting.ScreenResolution);//设置屏幕分辨率
+	GameUserSetting->SetVSyncEnabled(NewRenderSetting.bIsVSyncEnabled);//设置垂直同步
+	GameUserSetting->SetFrameRateLimit(NewRenderSetting.FrameRateLimit);//设置帧率限制
+
+	//应用设置
+	GameUserSetting->ApplyNonResolutionSettings();//应用非分辨率设置。
+	GameUserSetting->ApplyResolutionSettings(false);//应用分辨率设置
+	GameUserSetting->ApplySettings(false);//应用设置。
+
+	SaveTravelingGameSetting();//保存游戏设置存档
+	
+}
+
+void UTravelingGameInstance::RestGameRenderSetting()
+{
+	UGameUserSettings* GameUserSetting = UGameUserSettings::GetGameUserSettings();//获取游戏设置
+	GameUserSetting->ResetToCurrentSettings();//重置你游戏设置为系统设置
+	FTASaveGameSettingData_RenderSetting NewRenderSetting;//设置新数据
+	{
+		NewRenderSetting.ShadingQuality = GameUserSetting->GetShadingQuality();
+		NewRenderSetting.ShadowQuality = GameUserSetting->GetShadowQuality();
+		NewRenderSetting.GlobalIlluminationQuality = GameUserSetting->GetGlobalIlluminationQuality();
+		NewRenderSetting.AntiAliasingQuality = GameUserSetting->GetAntiAliasingQuality();
+		NewRenderSetting.ReflectionQuality = GameUserSetting->GetReflectionQuality();
+		NewRenderSetting.TextureQuality = GameUserSetting->GetTextureQuality();
+		NewRenderSetting.PostProcessingQuality = GameUserSetting->GetPostProcessingQuality();
+	
+		NewRenderSetting.FullscreenMode = GameUserSetting->GetFullscreenMode();
+		NewRenderSetting.ScreenResolution = GameUserSetting->GetScreenResolution();
+		NewRenderSetting.bIsVSyncEnabled = GameUserSetting->bUseVSync;
+		NewRenderSetting.FrameRateLimit = GameUserSetting->GetFrameRateLimit();
+	}//游戏初始化数据设置
+
+	TravelingSaveGameSetting->TASaveGameSettingData.RenderSetting = NewRenderSetting;//更新游戏设置数据
+	SaveTravelingGameSetting();//保存游戏设置存档
+	
+	//应用设置
+	GameUserSetting->ApplyNonResolutionSettings();//应用非分辨率设置。
+	GameUserSetting->ApplyResolutionSettings(false);//应用分辨率设置
+	GameUserSetting->ApplySettings(false);//应用设置。
+	
+}
+
 bool UTravelingGameInstance::LoadTravelingGameSetting(bool bIsResetGameSetting,UTravelingSaveGame_Setting*& NewTravelingSaveGame_Setting)
 {
 	//判断是否要重置？
@@ -44,7 +101,8 @@ bool UTravelingGameInstance::LoadTravelingGameSetting(bool bIsResetGameSetting,U
 	//如果不存在的话需要创建一个新的游戏设置存档。
 	TravelingSaveGameSetting = NewObject<UTravelingSaveGame_Setting>(this,UTravelingAloneDeveloperSettings::GetDFDeveloperSettings()->TravelingSaveGame_SettingClass);
 	NewTravelingSaveGame_Setting = TravelingSaveGameSetting;
-	return UGameplayStatics::SaveGameToSlot(TravelingSaveGameSetting,UTravelingSaveGame_Setting::GetTravelingAloneGameSettingString(),0);
+	RestGameRenderSetting();//第一次游戏刷新游戏设置（这个函数中也会保存一次游戏设置存档，所以这里不再需要做保存的操作了！）
+	return true;
 	
 }
 

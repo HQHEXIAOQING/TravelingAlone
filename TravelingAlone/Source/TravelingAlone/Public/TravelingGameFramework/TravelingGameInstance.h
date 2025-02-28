@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "TravelingGameInstance.generated.h"
 
+struct FTASaveGameSettingData_RenderSetting;
 struct FTravelingSaveGameBase;
 class UTravelingSaveGame_Slot;
 class UTravelingSaveGame_Setting;
@@ -33,12 +34,21 @@ public:
 	//进入游戏初始化事件（在进入游戏后调用的事件，只有在主世界中调用搞得事件，请不要在主世界之外调用）
 	UFUNCTION(BlueprintCallable,DisplayName="进入游戏初始化事件",Category="TravelingGameInstance")
 	void GoToGameMain();
+
+	//应用游戏设置
+	UFUNCTION(BlueprintCallable,DisplayName="应用游戏渲染设置",Category="TravelingGameInstance")
+	void ApplyGameRenderSetting(FTASaveGameSettingData_RenderSetting NewRenderSetting);
+	//重置游戏渲染设置
+	UFUNCTION(BlueprintCallable,DisplayName="重置游戏渲染设置",Category="TravelingGameInstance")
+	void RestGameRenderSetting();
+
 	//加载游戏设置
 	UFUNCTION(BlueprintCallable,DisplayName="加载游戏设置",Category="TravelingGameInstance")
 	bool LoadTravelingGameSetting(bool bIsResetGameSetting,UTravelingSaveGame_Setting*& NewTravelingSaveGame_Setting);
 	//保存游戏设置
 	UFUNCTION(BlueprintCallable,DisplayName="保存游戏设置",Category="TravelingGameInstance")
 	bool SaveTravelingGameSetting();
+
 	//加载游戏存档
 	UFUNCTION(BlueprintCallable,DisplayName="加载游戏存档",Category="TravelingGameInstance")
 	bool LoadTravelingSaveGameFromSlot(FString SlotId);
