@@ -11,6 +11,7 @@ class TRAVELINGALONE_API UTravelingGameInstance:public UGameInstance
 {
 	GENERATED_BODY()
 public:
+	 virtual void Init() override;//游戏实例初始化内容
 	//变量***********************************************
 	
 	//游戏设置存档
@@ -19,9 +20,6 @@ public:
 	//当前游戏存档数据
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,DisplayName="当前游戏存档数据",Category="TravelingGameInstance")
 	UTravelingSaveGame_Slot* TravelingSaveGameCurrent = nullptr;
-	//是否新游戏
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,DisplayName="是否新游戏",Category="TravelingGameInstance")
-	bool bIsNewGame = false;
 	//当前游戏插槽Id
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,DisplayName="当前游戏插槽Id",Category="TravelingGameInstance")
 	FString CurrentSaveGameId = FString("");
@@ -30,7 +28,7 @@ public:
 
 	//进入游戏前初始化事件（在进入游戏前需要处理和设置的内容）
 	UFUNCTION(BlueprintCallable,DisplayName="进入游戏初始化事件",Category="TravelingGameInstance")
-	void PreGoToGameMain(bool bNewIsNewGame,FString NewCurrentSaveGameId);
+	void PreGoToGameMain(FString NewCurrentSaveGameId);
 	//进入游戏初始化事件（在进入游戏后调用的事件，只有在主世界中调用搞得事件，请不要在主世界之外调用）
 	UFUNCTION(BlueprintCallable,DisplayName="进入游戏初始化事件",Category="TravelingGameInstance")
 	void GoToGameMain();

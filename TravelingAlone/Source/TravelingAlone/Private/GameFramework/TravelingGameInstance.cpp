@@ -5,16 +5,28 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "SaveGame/TravelingSaveGame.h"
 
-void UTravelingGameInstance::PreGoToGameMain(bool bNewIsNewGame,FString NewCurrentSaveGameId)
+void UTravelingGameInstance::Init()
 {
-	bIsNewGame = bNewIsNewGame;//设置当前游戏内容
+	Super::Init();
+	// 注册控制台命令
+	/*
+	IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("MyCommand"),
+		TEXT("This is a custom console command."),
+		FConsoleCommandWithArgsDelegate::CreateStatic(&UControlCommand::MyConsoleCommand)
+	);
+	*/
+}
+
+void UTravelingGameInstance::PreGoToGameMain(FString NewCurrentSaveGameId)
+{
 	CurrentSaveGameId = NewCurrentSaveGameId;//设置新的游戏存档Id
 }
 
 void UTravelingGameInstance::GoToGameMain()
 {
 	TravelingSaveGameCurrent = Cast<UTravelingSaveGame_Slot>(UGameplayStatics::LoadGameFromSlot(CurrentSaveGameId,0));
-	if (!TravelingSaveGameCurrent)
+	if (!TravelingSaveGameCurrent)//判断此插槽是否存在,不存在的话就创建新的对象。
 	{
 		TravelingSaveGameCurrent = NewObject<UTravelingSaveGame_Slot>(this,UTravelingAloneDeveloperSettings::GetDFDeveloperSettings()->TravelingSaveGame_SlotClass);//创建游戏存档
 		FTravelingSaveGameBase NewTravelingSaveGameBase;//设置基本数据
