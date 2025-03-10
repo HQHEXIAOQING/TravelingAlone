@@ -25,6 +25,8 @@ void UTravelingGameInstance::PreGoToGameMain(FString NewCurrentSaveGameId)
 
 void UTravelingGameInstance::GoToGameMain()
 {
+	if (UGameplayStatics::DoesSaveGameExist(CurrentSaveGameId,0) == false)//判断当前存档是否不存在。
+	{UE_LOG(LogTemp,Error,TEXT("UTravelingGameInstance::GoToGameMain 这里没有找到当前进入的存档ID，请创建或者修改进入方式！"))return;}
 	TravelingSaveGameCurrent = Cast<UTravelingSaveGame_Slot>(UGameplayStatics::LoadGameFromSlot(CurrentSaveGameId,0));
 	if (!TravelingSaveGameCurrent)//判断此插槽是否存在,不存在的话就创建新的对象。
 	{

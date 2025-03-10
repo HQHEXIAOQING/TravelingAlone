@@ -7,9 +7,9 @@ class TRAVELINGALONE_API ATAPlayerCharacter: public ATACharacterBase
 {
 	GENERATED_BODY()
 public:
-	//变量****************************************
+	//函数**********************************************
 
-	
-
+	UFUNCTION(BlueprintCallable,DisplayName="移动输入", Category = "TAPlayerCharacter")
+	void MoveInput(FVector2D InputVector);
 	
 };
