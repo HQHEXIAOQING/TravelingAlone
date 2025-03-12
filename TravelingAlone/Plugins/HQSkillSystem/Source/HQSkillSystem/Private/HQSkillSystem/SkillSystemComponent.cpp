@@ -12,14 +12,14 @@ bool USkillSystemComponent::ActivateSkill(FHQSkillInfo NewHQSkillLInfo,TSubclass
 		return false;
 	}else
 	{
-		USkillProcessingObjectBase* Skill = NewObject<USkillProcessingObjectBase>(this, ActivateSkill);
+		TObjectPtr<USkillProcessingObjectBase> Skill = NewObject<USkillProcessingObjectBase>(this, ActivateSkill);
 		if (Skill->CanActivateSkillStart(this,NewHQSkillLInfo))//判断激活条件是否满足
 		{
 			Skill->SkillStart(this,NewHQSkillLInfo);//触发技能开始
 			Map_SkillIDToSkillObject.Add(NewHQSkillLInfo.SkillId,Skill);//在已执行的技能中添加此技能
 			ActivateSkillEvent(Skill);
 			return true;
-		}
+		}else{Skill->ConditionalBeginDestroy();}//如果条件不满足应该直接销毁此对象。
 		return false;
 	}
 }

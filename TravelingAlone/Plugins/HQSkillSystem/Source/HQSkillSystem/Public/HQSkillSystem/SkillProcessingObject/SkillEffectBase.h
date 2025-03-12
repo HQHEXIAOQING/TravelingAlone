@@ -58,7 +58,6 @@ public:
 	//CD结束事件
 	void CDTimerHandleEvent()
 	{
-		UE_LOG(LogTemp,Error,TEXT("CD结束了！"))
 		SkillSystemComponent->GetWorld()->GetTimerManager().ClearTimer(CDTimerHandle);
 		SkillSystemComponent->SkillCoolDownEnd(HQSkillLInfo.SkillId);
 		ConditionalBeginDestroy();//添加标记销毁

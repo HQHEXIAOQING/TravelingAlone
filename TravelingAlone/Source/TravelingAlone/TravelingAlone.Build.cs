@@ -15,7 +15,8 @@ public class TravelingAlone : ModuleRules
 			"Engine", 
 			"InputCore", 
 			"EnhancedInput",
-			"DeveloperSettings"
+			"DeveloperSettings",
+			"HQSkillSystem"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
