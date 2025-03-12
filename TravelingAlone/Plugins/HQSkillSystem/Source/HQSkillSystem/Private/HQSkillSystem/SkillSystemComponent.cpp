@@ -2,7 +2,7 @@
 #include "HQSkillSystem/SkillProcessingObject/SkillEffectBase.h"
 #include "HQSkillSystem/SkillProcessingObject/SkillProcessingObjectBase.h"
 
-bool USkillSystemComponent::ActivateSkill(FHQSkillInfo NewHQSkillLInfo,TSubclassOf<USkillProcessingObjectBase> ActivateSkill)
+bool USkillSystemComponent::ActivateSkill(FHQSkillInfo NewHQSkillLInfo,TSubclassOf<USkillProcessingObjectBase> ActivateSkillClass)
 {
 	if (Map_SkillIDToSkillObject.Contains(NewHQSkillLInfo.SkillId))//判断技能是否还在执行中
 	{
@@ -12,7 +12,7 @@ bool USkillSystemComponent::ActivateSkill(FHQSkillInfo NewHQSkillLInfo,TSubclass
 		return false;
 	}else
 	{
-		TObjectPtr<USkillProcessingObjectBase> Skill = NewObject<USkillProcessingObjectBase>(this, ActivateSkill);
+		TObjectPtr<USkillProcessingObjectBase> Skill = NewObject<USkillProcessingObjectBase>(this, ActivateSkillClass);
 		if (Skill->CanActivateSkillStart(this,NewHQSkillLInfo))//判断激活条件是否满足
 		{
 			Skill->SkillStart(this,NewHQSkillLInfo);//触发技能开始

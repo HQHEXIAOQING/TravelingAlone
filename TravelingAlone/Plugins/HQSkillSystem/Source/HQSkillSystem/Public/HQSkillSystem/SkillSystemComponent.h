@@ -23,7 +23,7 @@ public:
 
 	//激活技能
 	UFUNCTION(BlueprintCallable,DisplayName="激活技能",Category="SkillSystemComponentFunction")
-	virtual bool ActivateSkill(FHQSkillInfo NewHQSkillLInfo,TSubclassOf<USkillProcessingObjectBase> ActivateSkill);
+	virtual bool ActivateSkill(FHQSkillInfo NewHQSkillLInfo,TSubclassOf<USkillProcessingObjectBase> ActivateSkillClass);
 	UFUNCTION(BlueprintImplementableEvent,DisplayName="激活技能事件",meta=(ToolTip = "这里的激活事件只会在技能第一次被激活时调用。"),Category="SkillSystemComponent")
 	void ActivateSkillEvent(USkillProcessingObjectBase* CurrentActivateSkill);
 	//移除结束技能（将已经结束的技能进行移除）
