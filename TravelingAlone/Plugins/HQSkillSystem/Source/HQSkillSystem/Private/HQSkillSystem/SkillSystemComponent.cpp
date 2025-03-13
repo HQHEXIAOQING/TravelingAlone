@@ -4,6 +4,7 @@
 
 bool USkillSystemComponent::ActivateSkill(FHQSkillInfo NewHQSkillLInfo,TSubclassOf<USkillProcessingObjectBase> ActivateSkillClass)
 {
+	if(!ActivateSkillClass){UE_LOG(LogTemp,Error,TEXT("USkillSystemComponent::ActivateSkill 对象没有正确的技能处理类！"));return false;}
 	if (Map_SkillIDToSkillObject.Contains(NewHQSkillLInfo.SkillId))//判断技能是否还在执行中
 	{
 		//判断此技能是否可以激活
@@ -15,8 +16,8 @@ bool USkillSystemComponent::ActivateSkill(FHQSkillInfo NewHQSkillLInfo,TSubclass
 		TObjectPtr<USkillProcessingObjectBase> Skill = NewObject<USkillProcessingObjectBase>(this, ActivateSkillClass);
 		if (Skill->CanActivateSkillStart(this,NewHQSkillLInfo))//判断激活条件是否满足
 		{
-			Skill->SkillStart(this,NewHQSkillLInfo);//触发技能开始
 			Map_SkillIDToSkillObject.Add(NewHQSkillLInfo.SkillId,Skill);//在已执行的技能中添加此技能
+			Skill->SkillStart(this,NewHQSkillLInfo);//触发技能开始
 			ActivateSkillEvent(Skill);
 			return true;
 		}else{Skill->ConditionalBeginDestroy();}//如果条件不满足应该直接销毁此对象。
