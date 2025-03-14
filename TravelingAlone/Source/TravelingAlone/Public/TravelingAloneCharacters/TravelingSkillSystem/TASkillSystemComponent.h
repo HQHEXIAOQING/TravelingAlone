@@ -17,6 +17,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite,DisplayName="拥有的技能以及对应数据",Category="TASkillSystemComponent")
 	TMap<FName,FTASkillInfo> Map_TASkillIDToSkillInfo;
 
+	//函数*****************************************************************
+	
 	//添加拥有的技能
 	UFUNCTION(BlueprintCallable,DisplayName="添加拥有的技能",Category="SkillSystemComponentFunction")
 	bool AddTASkillInfo(FTASkillEntityInfo NewTASkillEntityInfo);

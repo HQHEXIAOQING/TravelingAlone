@@ -26,8 +26,8 @@ struct FTASkillBaseInfo :public FTableRowBase
 	//技能介绍
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,DisplayName="技能介绍",Category="TASkillBaseInfo")
 	FText SkillIntroduce = FText::FromString(TEXT("技能介绍"));
-	//技能触发类
-	UPROPERTY(EditAnywhere, BlueprintReadWrite,DisplayName="技能触发类",Category="TASkillBaseInfo")
+	//技能处理类
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,DisplayName="技能处理类",Category="TASkillBaseInfo")
 	TSubclassOf<USkillProcessingObjectBase> SkillProcessingClass = nullptr;
 	//技能可触发次数(默认值)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,DisplayName="技能可触发次数",Category="TASkillBaseInfo")
