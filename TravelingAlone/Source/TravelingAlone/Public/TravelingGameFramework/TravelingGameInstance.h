@@ -30,7 +30,7 @@ public:
 	UFUNCTION(BlueprintCallable,DisplayName="进入游戏初始化事件",Category="TravelingGameInstance")
 	void PreGoToGameMain(FString NewCurrentSaveGameId);
 	//进入游戏初始化事件（在进入游戏后调用的事件，只有在主世界中调用搞得事件，请不要在主世界之外调用）
-	UFUNCTION(BlueprintCallable,DisplayName="进入游戏初始化事件",Category="TravelingGameInstance")
+	UFUNCTION(BlueprintCallable,DisplayName="进入游戏事件",Category="TravelingGameInstance")
 	void GoToGameMain();
 
 	//应用游戏设置

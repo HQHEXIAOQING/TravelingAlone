@@ -13,10 +13,10 @@ public class TravelingAlone : ModuleRules
 			"Core", 
 			"CoreUObject", 
 			"Engine", 
-			"InputCore", 
+			"InputCore",
 			"EnhancedInput",
-			"DeveloperSettings",
-			"HQSkillSystem"
+			"HQSkillSystem",
+			"DeveloperSettings"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

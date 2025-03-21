@@ -21,13 +21,14 @@ void UTravelingGameInstance::Init()
 void UTravelingGameInstance::PreGoToGameMain(FString NewCurrentSaveGameId)
 {
 	CurrentSaveGameId = NewCurrentSaveGameId;//设置新的游戏存档Id
+	//UE_LOG(LogTemp,Error,TEXT("UTravelingGameInstance::PreGoToGameMain 新数据ID：%s"),*CurrentSaveGameId);
 }
 
 void UTravelingGameInstance::GoToGameMain()
 {
-	if (UGameplayStatics::DoesSaveGameExist(CurrentSaveGameId,0) == false)//判断当前存档是否不存在。
-	{UE_LOG(LogTemp,Error,TEXT("UTravelingGameInstance::GoToGameMain 这里没有找到当前进入的存档ID，请创建或者修改进入方式！"))return;}
-	TravelingSaveGameCurrent = Cast<UTravelingSaveGame_Slot>(UGameplayStatics::LoadGameFromSlot(CurrentSaveGameId,0));
+	if (UGameplayStatics::DoesSaveGameExist(CurrentSaveGameId,0))//判断当前存档是否存在，存在就加载此数据
+	{TravelingSaveGameCurrent = Cast<UTravelingSaveGame_Slot>(UGameplayStatics::LoadGameFromSlot(CurrentSaveGameId,0));}
+	
 	if (!TravelingSaveGameCurrent)//判断此插槽是否存在,不存在的话就创建新的对象。
 	{
 		TravelingSaveGameCurrent = NewObject<UTravelingSaveGame_Slot>(this,UTravelingAloneDeveloperSettings::GetDFDeveloperSettings()->TravelingSaveGame_SlotClass);//创建游戏存档
